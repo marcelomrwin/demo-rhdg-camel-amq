@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<replicated-cache name="DATA-LAYER-CACHE" mode="SYNC" statistics="true">
+	<encoding media-type="application/x-protostream"/>
+	<locking isolation="REPEATABLE_READ"/>
+	<transaction mode="NON_XA" locking="PESSIMISTIC"/>
+	<expiration lifespan="300000"/>
+	<memory max-size="10MB" when-full="REMOVE"/>
+</replicated-cache>

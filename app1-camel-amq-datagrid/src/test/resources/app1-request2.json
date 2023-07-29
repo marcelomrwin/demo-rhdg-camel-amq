@@ -1,0 +1,19 @@
+{
+  "id": 1,
+  "attribute": "FARM",
+  "appId": "APP1",
+  "loans": [
+    {
+      "status": "Payment Approved",
+      "value": 500.0
+    }
+  ]
+,
+  "flocks": [
+    {
+      "type": "Sheep",
+      "location": "Hill",
+      "total": 36
+    }
+  ]
+}

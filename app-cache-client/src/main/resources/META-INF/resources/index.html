@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><title>Displaying Data Grid Cache Data</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Cache Entries</title>
+
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/patternfly/3.24.0/css/patternfly.min.css">
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/patternfly/3.24.0/css/patternfly-additions.min.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+
+    <style>
+        div.code {
+            white-space: pre;
+        }
+    </style>
+
+</head>
+<body style="padding: 5px;">
+<h1>Displaying Data Grid Cache</h1>
+<hr/>
+<div>
+    <input type="text" id="cacheId"/>
+    <button class="btn btn-info" id="request">Get Cache Value</button>
+    <hr/>
+
+    <div class="code" id="result"></div>
+
+    <div id="messages"></div>
+</div>
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+
+    $("#request").click((event) => {
+        fetch("/api/" + $("#cacheId").val(), {method: "GET"})
+            .then(res => res.text())
+            .then(ret => {
+                // console.log(ret);
+                var json = JSON.parse(ret);
+                if (json.type === 'LOAD') {
+                    $("#messages").html(json.message);
+                    $("#result").empty();
+                } else if (json.type === 'DATA') {
+                    $("#result").html(JSON.stringify(json.registry, null, 2));
+                    hljs.highlightElement(document.getElementById("result"));
+                    $("#messages").html(json.message);
+                } else {
+                    console.log("unrecognized return")
+                }
+            });
+    });
+
+    var source = new EventSource("/api");
+    source.onmessage = (event) => {
+        // console.log(event);
+        let json = JSON.parse(event.data);
+        // console.log(json);
+        if (Number($("#cacheId").val()) === Number(json.id)) {
+            $("#result").html(JSON.stringify(json, null, 2));
+            hljs.highlightElement(document.getElementById("result"));
+            $("#messages").html("Successfully recovered data");
+        }
+    };
+    source.onopen = (event) => {
+        console.log(event);
+    }
+
+</script>
+</html>
