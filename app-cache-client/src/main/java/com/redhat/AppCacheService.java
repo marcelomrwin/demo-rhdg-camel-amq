@@ -35,9 +35,4 @@ public class AppCacheService {
         }
     }
 
-    public void updateCache(String id) {
-
-    }
-
-
 }

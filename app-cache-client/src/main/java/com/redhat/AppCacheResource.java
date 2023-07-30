@@ -44,7 +44,6 @@ public class AppCacheResource {
         try {
             Optional<Registry> registryOptional = service.query(id);
             if (registryOptional.isEmpty()) {
-                service.updateCache(id);
                 ApiResponse response = ApiResponse.builder()
                         .message("Data will be loaded, please wait a few seconds")
                         .type(ApiResponse.ApiResponseType.LOAD)

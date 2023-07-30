@@ -1,6 +1,6 @@
 # Demo
 
-This project demonstrates how to use ![https://www.redhat.com/en/technologies/jboss-middleware/amq](Red Hat AMQ) + Red Hat Data Grid and Red Hat Build of Camel with Quarkus to create a data layer with a canonical data model.
+This project demonstrates how to use [Red Hat AMQ](https://www.redhat.com/en/technologies/jboss-middleware/amq) + [Red Hat Data Grid](https://www.redhat.com/en/technologies/jboss-middleware/data-grid) and [Red Hat Build of Camel with Quarkus](https://access.redhat.com/documentation/en-us/red_hat_build_of_apache_camel_extensions_for_quarkus/) to create a data layer with a canonical data model.
 
 ## Run Separate
 
