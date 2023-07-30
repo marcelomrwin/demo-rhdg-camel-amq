@@ -4,7 +4,7 @@
 
 ### Compile all projects
 ```shell
-mvn clean package -DskipTests
+mvn clean install -DskipTests
 ```
 
 ### Start the infra services
@@ -15,22 +15,22 @@ docker compose down && docker compose up
 ### Execute the Generator client (a fake source)
 ```shell
 cd amq-client
-./mvnw clean quarkus:dev -Ddebug=false
+./mvnw quarkus:dev -Ddebug=false
 ```
 
 ### Execute the First Integration layer
 ```shell
 cd app1-camel-amq-datagrid
-./mvnw clean quarkus:dev -Ddebug=false
+./mvnw quarkus:dev -Ddebug=false
 
 cd app2-camel-amq-datagrid
-./mvnw clean quarkus:dev -Ddebug=false
+./mvnw quarkus:dev -Ddebug=false
 ```
 
 ### Execute the second Integration layer
 ```shell
 cd app-cache-client
-./mvnw clean quarkus:dev -Ddebug=false
+./mvnw quarkus:dev -Ddebug=false
 ```
 
 ## Run with Docker compose

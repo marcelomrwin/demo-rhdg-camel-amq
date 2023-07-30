@@ -10,7 +10,7 @@ public class MessageConsumerRoute extends RouteBuilder {
 
         from("amqp:queue:APP1_DATA_RECORD_QUEUE")
                 .routeId("data_record_consumer")
-                .log("BODY\n${body}")
+                .log("{{camel.context.name}} BODY\n${body}")
                 .setHeader(Constants.REGISTRY_ID).jq(".id", String.class)
                 .unmarshal().json(App1Model.class)
                 .to("direct:get-registry-from-cache")

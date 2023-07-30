@@ -11,7 +11,7 @@
 ,
 "flocks": [
 {
-"type": "Chicken",
+"type": "APP1 - Chicken",
 "location": "Grange",
 "total": 500
 }

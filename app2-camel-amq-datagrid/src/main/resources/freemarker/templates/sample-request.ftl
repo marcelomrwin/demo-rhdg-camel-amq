@@ -6,7 +6,7 @@
         <flock>
             <location>Grange</location>
             <total>335</total>
-            <type>Chicken</type>
+            <type>APP2 - Chicken</type>
         </flock>
     </flocks>
     <loans>
