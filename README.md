@@ -37,10 +37,10 @@ cd app-cache-client
 
 ### Compile all projects
 ```shell
-mvn clean package -DskipTests
+./mvnw clean install -Dskiptests
 ```
 
 ### Execute all projects
 ```shell
-docker compose down -f docker-compose-complete.yml && docker compose up -f docker-compose-complete.yml --build
+docker compose -f docker-compose-complete.yml down && docker compose -f docker-compose-complete.yml up --build
 ```

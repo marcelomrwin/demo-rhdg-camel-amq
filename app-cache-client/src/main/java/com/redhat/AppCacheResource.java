@@ -27,7 +27,7 @@ public class AppCacheResource {
 
     private Sse sse;
     private SseEventSink sseEventSink = null;
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 
     @GET

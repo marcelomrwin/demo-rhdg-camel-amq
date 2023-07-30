@@ -70,9 +70,6 @@ public class CacheManager implements Processor {
     @Override
     public void process(Exchange exchange) throws Exception {
 
-        logger.info("RemoteCache is transactional? {}", cache.isTransactional());
-        logger.info("RemoteCache has transactionManager? {}", cache.getTransactionManager());
-
         TransactionManager transactionManager = cache.getTransactionManager();
         transactionManager.begin();
 

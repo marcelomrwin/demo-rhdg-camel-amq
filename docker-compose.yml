@@ -2,18 +2,19 @@ version: "3.9"
 
 services:
 
-  amq:
+  artemis:
     image: registry.redhat.io/amq7/amq-broker-rhel8:7.11.1
-    container_name: amq
-    hostname: amq
+    container_name: artemis
+    hostname: artemis
     restart: always
     ports:
-      - 8161:8161
-      - 61616:61616
+      - "8161:8161"
+      - "61616:61616"
+      - "5672:5672"
     environment:
-      - TZ=Europe/Madrid
-      - AMQ_USER=amquser
-      - AMQ_PASSWORD=password
+      TZ: Europe/Madrid
+      AMQ_USER: quarkus
+      AMQ_PASSWORD: quarkus
     healthcheck:
       test: /home/jboss/broker/bin/artemis check node | grep success
       interval: 5s
@@ -21,17 +22,17 @@ services:
       start_period: 5s
       timeout: 5s
 
-  dg:
+  infinispan:
     image: registry.redhat.io/datagrid/datagrid-8-rhel8:1.4
-    container_name: dg
-    hostname: dg
+    container_name: infinispan
+    hostname: infinispan
     restart: always
     ports:
-      - 11222:11222
+      - "11222:11222"
     environment:
-      - TZ=Europe/Madrid
-      - USER=dguser
-      - PASS=password
+      TZ: Europe/Madrid
+      USER: quarkus
+      PASS: password
     volumes:
       - ./infinispan.xml:/opt/infinispan/server/conf/infinispan.xml
     healthcheck:

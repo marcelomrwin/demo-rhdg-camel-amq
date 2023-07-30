@@ -5,14 +5,14 @@
     <flocks>
         <flock>
             <location>Grange</location>
-            <total>335</total>
+            <total>${headers.RANDOM_COUNT}</total>
             <type>APP2 - Chicken</type>
         </flock>
     </flocks>
     <loans>
         <loan>
             <status>approved</status>
-            <value>85.0</value>
+            <value>${headers.RANDOM_AMOUNT}</value>
         </loan>
     </loans>
 </request>

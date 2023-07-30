@@ -2,18 +2,19 @@ version: "3.9"
 
 services:
 
-  amq:
+  artemis:
     image: registry.redhat.io/amq7/amq-broker-rhel8:7.11.1
-    container_name: amq
-    hostname: amq
+    container_name: artemis
+    hostname: artemis
     restart: always
     ports:
-      - 8161:8161
-      - 61616:61616
+      - "8161:8161"
+      - "61616:61616"
+      - "5672:5672"
     environment:
-      - TZ=Europe/Madrid
-      - AMQ_USER=amquser
-      - AMQ_PASSWORD=password
+      TZ: Europe/Madrid
+      AMQ_USER: quarkus
+      AMQ_PASSWORD: quarkus
     healthcheck:
       test: /home/jboss/broker/bin/artemis check node | grep success
       interval: 5s
@@ -22,18 +23,24 @@ services:
       timeout: 5s
     networks:
       - demo-network
+    deploy:
+      resources:
+        limits:
+          memory: "512M"
+        reservations:
+          memory: "256M"
 
-  dg:
+  infinispan:
     image: registry.redhat.io/datagrid/datagrid-8-rhel8:1.4
-    container_name: dg
-    hostname: dg
+    container_name: infinispan
+    hostname: infinispan
     restart: always
     ports:
-      - 11222:11222
+      - "11222:11222"
     environment:
-      - TZ=Europe/Madrid
-      - USER=dguser
-      - PASS=password
+      TZ: Europe/Madrid
+      USER: quarkus
+      PASS: password
     volumes:
       - ./infinispan.xml:/opt/infinispan/server/conf/infinispan.xml
     healthcheck:
@@ -44,6 +51,12 @@ services:
       timeout: 5s
     networks:
       - demo-network
+    deploy:
+      resources:
+        limits:
+          memory: "512M"
+        reservations:
+          memory: "256M"
 
   amq-client:
     image: amq-client:1.0
@@ -52,18 +65,22 @@ services:
       context: amq-client
       dockerfile: src/main/docker/Dockerfile.jvm
     environment:
-      AMQP_HOST: amq
+      AMQP_HOST: artemis
     ports:
       - "8081:8081"
     depends_on:
-      dg:
+      infinispan:
         condition: service_healthy
-        restart: true
-      amq:
+      artemis:
         condition: service_healthy
-        restart: true
     networks:
       - demo-network
+    deploy:
+      resources:
+        limits:
+          memory: "128M"
+        reservations:
+          memory: "20M"
 
   app1-camel-amq-datagrid:
     image: app1-camel-amq-datagrid:1.0
@@ -72,17 +89,21 @@ services:
       context: app1-camel-amq-datagrid
       dockerfile: src/main/docker/Dockerfile.jvm
     environment:
-      AMQP_HOST: amq
-      DG_HOST: dg
+      AMQP_HOST: artemis
+      DG_HOST: infinispan
     depends_on:
-      dg:
+      infinispan:
         condition: service_healthy
-        restart: true
-      amq:
+      artemis:
         condition: service_healthy
-        restart: true
     networks:
       - demo-network
+    deploy:
+      resources:
+        limits:
+          memory: "128M"
+        reservations:
+          memory: "20M"
 
   app2-camel-amq-datagrid:
     image: app2-camel-amq-datagrid:1.0
@@ -91,17 +112,21 @@ services:
       context: app2-camel-amq-datagrid
       dockerfile: src/main/docker/Dockerfile.jvm
     environment:
-      AMQP_HOST: amq
-      DG_HOST: dg
+      AMQP_HOST: artemis
+      DG_HOST: infinispan
     depends_on:
-      dg:
+      infinispan:
         condition: service_healthy
-        restart: true
-      amq:
+      artemis:
         condition: service_healthy
-        restart: true
     networks:
       - demo-network
+    deploy:
+      resources:
+        limits:
+          memory: "128M"
+        reservations:
+          memory: "20M"
 
   app-cache-client:
     image: app-cache-client:1.0
@@ -110,19 +135,23 @@ services:
       context: app-cache-client
       dockerfile: src/main/docker/Dockerfile.jvm
     environment:
-      AMQP_HOST: amq
-      DG_HOST: dg
+      AMQP_HOST: artemis
+      DG_HOST: infinispan
     ports:
       - "8080:8080"
     depends_on:
-      dg:
+      infinispan:
         condition: service_healthy
-        restart: true
-      amq:
+      artemis:
         condition: service_healthy
-        restart: true
     networks:
       - demo-network
+    deploy:
+      resources:
+        limits:
+          memory: "128M"
+        reservations:
+          memory: "20M"
 
 networks:
   demo-network:

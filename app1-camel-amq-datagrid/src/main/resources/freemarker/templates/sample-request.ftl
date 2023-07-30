@@ -5,7 +5,7 @@
 "loans": [
 {
 "status": "approved",
-"value": 100.0
+"value": ${headers.RANDOM_AMOUNT}
 }
 ]
 ,
@@ -13,7 +13,7 @@
 {
 "type": "APP1 - Chicken",
 "location": "Grange",
-"total": 500
+"total": ${headers.RANDOM_COUNT}
 }
 ]
 }
