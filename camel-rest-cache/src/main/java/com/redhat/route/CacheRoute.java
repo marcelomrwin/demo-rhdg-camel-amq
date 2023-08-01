@@ -2,6 +2,7 @@ package com.redhat.route;
 
 import com.redhat.model.ApiResponse;
 import com.redhat.model.Registry;
+import org.apache.camel.ExchangePattern;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.infinispan.InfinispanConstants;
 import org.apache.camel.component.infinispan.InfinispanOperation;
@@ -22,8 +23,8 @@ public class CacheRoute extends RouteBuilder {
         ;
 
         from("direct:cacheNotFound").routeId("cacheNotFound")
-                .setBody(simple("${in.header.CamelInfinispanKey}"))
-                .to("amqp:topic:CACHE_UPDATE_REQUEST")
+                .log("Key ${in.header.CamelInfinispanKey} not found in cache DATA-LAYER-CACHE")
+                .to(ExchangePattern.InOnly, "seda:request-update")
                 .process(exchange -> {
                     ApiResponse response = ApiResponse.builder()
                             .message("Data will be loaded, please wait a few seconds")
@@ -33,8 +34,14 @@ public class CacheRoute extends RouteBuilder {
                 }).marshal().json(true)
         ;
 
+        from("seda:request-update").routeId("request-update")
+                .setBody(simple("${in.header.CamelInfinispanKey}"))
+                .removeHeaders("CamelHttp*")
+                .to("amqp:topic:CACHE_UPDATE_REQUEST");
+
         from("direct:cacheFound")
                 .routeId("cacheFound")
+                .log("Key ${in.header.CamelInfinispanKey} founded in cache DATA-LAYER-CACHE")
                 .unmarshal().json(Registry.class)
                 .process(exchange -> {
                     ApiResponse response = ApiResponse.builder()

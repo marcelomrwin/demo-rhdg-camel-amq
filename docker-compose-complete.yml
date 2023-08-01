@@ -58,17 +58,42 @@ services:
         reservations:
           memory: "256M"
 
-  amq-client:
-    image: amq-client:1.0
-    container_name: amq-client
-    hostname: amq-client
+  app1:
+    image: app1:1.0
+    container_name: app1
+    hostname: app1
     build:
-      context: amq-client
+      context: app1
       dockerfile: src/main/docker/Dockerfile.jvm
     environment:
       AMQP_HOST: artemis
     ports:
-      - "8081:8081"
+      - "8091:8091"
+    depends_on:
+      infinispan:
+        condition: service_healthy
+      artemis:
+        condition: service_healthy
+    networks:
+      - demo-network
+    deploy:
+      resources:
+        limits:
+          memory: "128M"
+        reservations:
+          memory: "20M"
+
+  app2:
+    image: app2:1.0
+    container_name: app2
+    hostname: app2
+    build:
+      context: app2
+      dockerfile: src/main/docker/Dockerfile.jvm
+    environment:
+      AMQP_HOST: artemis
+    ports:
+      - "8092:8092"
     depends_on:
       infinispan:
         condition: service_healthy
@@ -93,6 +118,8 @@ services:
     environment:
       AMQP_HOST: artemis
       DG_HOST: infinispan
+      APP1_HOST: app1
+      APP1_PORT: 8091
     depends_on:
       infinispan:
         condition: service_healthy
@@ -117,6 +144,8 @@ services:
     environment:
       AMQP_HOST: artemis
       DG_HOST: infinispan
+      APP2_HOST: app2
+      APP2_PORT: 8092
     depends_on:
       infinispan:
         condition: service_healthy
@@ -131,12 +160,12 @@ services:
         reservations:
           memory: "20M"
 
-  app-cache-client:
-    image: app-cache-client:1.0
-    container_name: app-cache-client
-    hostname: app-cache-client
+  front-rest-cache-client:
+    image: front-rest-cache-client:1.0
+    container_name: front-rest-cache-client
+    hostname: front-rest-cache-client
     build:
-      context: app-cache-client
+      context: front-rest-cache-client
       dockerfile: src/main/docker/Dockerfile.jvm
     environment:
       AMQP_HOST: artemis
@@ -168,7 +197,7 @@ services:
       AMQP_HOST: artemis
       DG_HOST: infinispan
     ports:
-      - "8080:8080"
+      - "8089:8089"
     depends_on:
       infinispan:
         condition: service_healthy
@@ -183,15 +212,15 @@ services:
         reservations:
           memory: "20M"
 
-  nodejs-rest-client:
-    image: nodejs-rest-client:1.0
-    container_name: nodejs-rest-client
+  front-nodejs-rest-client:
+    image: front-nodejs-rest-client:1.0
+    container_name: front-nodejs-rest-client
     build:
-      context: nodejs-rest-client
+      context: front-nodejs-rest-client
       dockerfile: Dockerfile
       args:
         API_HOST: localhost
-        API_PORT: 8080
+        API_PORT: 8089
         API_PROTOCOL: http
     ports:
       - "3000:3000"

@@ -7,11 +7,11 @@ import java.util.Random;
 public class RandomNumbersUtil {
     static Random random = new Random();
 
-    public int randomInt() {
+    public static int randomInt() {
         return random.nextInt(1000) + 1;
     }
 
-    public double randomDouble() {
+    public static double randomDouble() {
         return BigDecimal.valueOf(random.nextDouble(1000) + 1).setScale(2, RoundingMode.HALF_EVEN).doubleValue();
     }
 }

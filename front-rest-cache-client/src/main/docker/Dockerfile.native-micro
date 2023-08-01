@@ -24,7 +24,7 @@ RUN chown 1001 /work \
     && chown 1001:root /work
 COPY --chown=1001:root target/*-runner /work/application
 
-EXPOSE 8089
+EXPOSE 8090
 USER 1001
 
 CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]

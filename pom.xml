@@ -19,11 +19,12 @@
     <surefire-plugin.version>3.0.0-M7</surefire-plugin.version>
   </properties>
   <modules>
-    <module>amq-client</module>
+    <module>app1</module>
+    <module>app2</module>
     <module>camel-amq-datagrid-common</module>
     <module>app1-camel-amq-datagrid</module>
     <module>app2-camel-amq-datagrid</module>
-    <module>app-cache-client</module>
+    <module>front-rest-cache-client</module>
     <module>camel-rest-cache</module>
   </modules>
   <dependencyManagement>

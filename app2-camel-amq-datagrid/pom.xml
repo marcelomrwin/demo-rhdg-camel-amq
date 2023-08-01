@@ -55,7 +55,7 @@
     </dependency>
     <dependency>
       <groupId>org.apache.camel.quarkus</groupId>
-      <artifactId>camel-quarkus-freemarker</artifactId>
+      <artifactId>camel-quarkus-http</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>

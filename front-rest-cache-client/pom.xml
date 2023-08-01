@@ -2,67 +2,58 @@
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
+  <artifactId>front-rest-cache-client</artifactId>
+
   <parent>
     <groupId>com.redhat</groupId>
     <artifactId>demo-parent</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
   </parent>
-  <artifactId>camel-rest-cache</artifactId>
+
   <dependencies>
     <dependency>
-      <groupId>com.redhat</groupId>
-      <artifactId>camel-amq-datagrid-common</artifactId>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-resteasy-reactive-jackson</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.apache.camel.quarkus</groupId>
-      <artifactId>camel-quarkus-bean</artifactId>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-infinispan-client</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.apache.camel.quarkus</groupId>
-      <artifactId>camel-quarkus-direct</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.camel.quarkus</groupId>
-      <artifactId>camel-quarkus-seda</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.camel.quarkus</groupId>
-      <artifactId>camel-quarkus-jsonpath</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.camel.quarkus</groupId>
-      <artifactId>camel-quarkus-amqp</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.camel.quarkus</groupId>
-      <artifactId>camel-quarkus-log</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.camel.quarkus</groupId>
-      <artifactId>camel-quarkus-infinispan</artifactId>
+      <groupId>io.quarkiverse.artemis</groupId>
+      <artifactId>quarkus-artemis-jms</artifactId>
+      <version>2.0.0</version>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-arc</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.apache.camel.quarkus</groupId>
-      <artifactId>camel-quarkus-jq</artifactId>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-resteasy-reactive</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.apache.camel.quarkus</groupId>
-      <artifactId>camel-quarkus-rest</artifactId>
+      <groupId>com.redhat</groupId>
+      <artifactId>camel-amq-datagrid-common</artifactId>
+      <version>1.0-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <groupId>org.apache.camel.quarkus</groupId>
-      <artifactId>camel-quarkus-vertx-websocket</artifactId>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-vertx</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-junit5</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>io.rest-assured</groupId>
+      <artifactId>rest-assured</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
+
   <build>
     <plugins>
       <plugin>
