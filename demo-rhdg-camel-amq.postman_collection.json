@@ -1,0 +1,167 @@
+{
+	"info": {
+		"_postman_id": "f3b9b624-8536-4f8c-8e74-51e7deac4a80",
+		"name": "demo-rhdg-camel-amq",
+		"description": "List of methods for testing the project",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12557199"
+	},
+	"item": [
+		{
+			"name": "app1 create provided data",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"id\": 1,\n  \"attribute\": \"FARM\",\n  \"appId\": \"APP1\",\n  \"loans\": [\n    {\n      \"status\": \"approved\",\n      \"value\": 100.0\n    }\n  ]\n,\n  \"flocks\": [\n    {\n      \"type\": \"Chicken\",\n      \"location\": \"Grange\",\n      \"total\": 500\n    }\n  ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8091/message",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8091",
+					"path": [
+						"message"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "app1 generate random data",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8091/message/random/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8091",
+					"path": [
+						"message",
+						"random",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "app2 create provided data",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<request id=\"1\">\n    <appId>APP2</appId>\n    <attribute>FARM</attribute>\n    <flocks>\n        <flock>\n            <location>Grange</location>\n            <total>335</total>\n            <type>Chicken</type>\n        </flock>\n    </flocks>\n    <loans>\n        <loan>\n            <status>approved</status>\n            <value>85.0</value>\n        </loan>\n    </loans>\n</request>",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8092/message",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8092",
+					"path": [
+						"message"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "app2 generate random data",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8092/message/random/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8092",
+					"path": [
+						"message",
+						"random",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "front-rest-cache-client get registry from cache or generate a random one",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8090/api/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"api",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "camel-rest-client get registry from cache or generate a new one",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8089/api/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8089",
+					"path": [
+						"api",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

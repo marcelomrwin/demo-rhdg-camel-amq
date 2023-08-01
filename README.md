@@ -30,6 +30,10 @@ Below is a description of each component of the solution:
   * **nodejs-rest-client**:
     * A simple client that consumes the API published by the _camel-rest-cache_ service and displays it through an HTML interface.
 * **Producer layer**
+  * **app1**: 
+    * Represents an application with its particular data model. Publishes data changes to the _APP1_DATA_RECORD_QUEUE_ queue and receives notifications via REST API from _app1-camel-amq-datagrid_ camel route to provide data.
+  * **app2**:
+    * Represents an application with its particular data model. Publishes data changes to the _APP2_DATA_RECORD_QUEUE_ queue and receives notifications via REST API from _app2-camel-amq-datagrid_ camel route to provide data.
 
 ## Requirements
 * JDK 17+
@@ -103,3 +107,42 @@ node server.js
 ```shell
 docker compose -f docker-compose-complete.yml down && docker compose -f docker-compose-complete.yml up --build
 ```
+
+## Testing the solution
+
+> **Note**
+> Before running the tests it is necessary that all services are properly active, use the way you want above.
+
+1. Access the _front-rest-cache-client_ service web interface `http://localhost:8090`
+![](img01.png)
+2. Access the _Data Grid_ admin console and navigate to the cache DATA-LAYER-CACHE page `http://localhost:11222/console/cache/DATA-LAYER-CACHE`
+![](img02.png)
+> **Warning**
+> At first, the cache will be completely empty. In a productive environment it is necessary to decide if this is the expected behavior or if auxiliary services will be necessary to "warm up" the cache before the applications look for information in it.
+
+> **Note**
+> In this solution, the applications look for the registration key in the cache and if they don't find it, they start a process to populate the cache. In the case of the _front-rest-cache-client_ application, which is configured to listen to events from the Data Grid and has the capacity to receive events from the server, the interface is updated in real time.
+
+3. Access the _front-nodejs-rest-client_ service web interface `http://localhost:3000`. *The interface is exactly the same as the **front-rest-cache-client** service*
+![](img01.png)
+
+4. In the _front-rest-cache-client_ interface, look for record **1**. Naturally, this value will not be found in the cache, so the service will send an update request by publishing a message in topic _CACHE_UPDATE_REQUEST_ in the AMQ Broker. 
+> **Note** 
+> We are talking about a **topic** and not a **queue**, as this update request must be answered by all applications that supply data to the canonical Data Grid model.
+
+5. The first response will be something similar to the snippet below, indicating that an update process for the requested record has been initiated.
+```json
+{
+    "type": "LOAD",
+    "registry": null,
+    "message": "Data will be loaded, please wait a few seconds"
+}
+```
+
+6. A few seconds later, you will be able to see the interface update with a sample of randomly generated data
+![](img03.png)
+
+> **Note**
+> In a real environment this data would possibly come from a database, for the sake of simplicity, both _app1_ and _app2_ make use of templates to generate examples with random data.
+
+
