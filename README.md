@@ -3,7 +3,7 @@
 This project demonstrates how to use [Red Hat AMQ](https://www.redhat.com/en/technologies/jboss-middleware/amq) + [Red Hat Data Grid](https://www.redhat.com/en/technologies/jboss-middleware/data-grid) and [Red Hat Build of Camel with Quarkus](https://access.redhat.com/documentation/en-us/red_hat_build_of_apache_camel_extensions_for_quarkus/) to create a data layer with a canonical data model.
 
 <div style="text-align: center;">
-  ![](diagram.png)
+  <img src="diagram.png" alt="Diagram"/>
 </div>
 
 Below is a description of each component of the solution:
