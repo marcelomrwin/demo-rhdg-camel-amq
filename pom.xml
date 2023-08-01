@@ -24,6 +24,7 @@
     <module>app1-camel-amq-datagrid</module>
     <module>app2-camel-amq-datagrid</module>
     <module>app-cache-client</module>
+    <module>camel-rest-cache</module>
   </modules>
   <dependencyManagement>
     <dependencies>

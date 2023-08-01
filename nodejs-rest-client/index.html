@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><title>Displaying Data Grid Cache Data</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Cache Entries</title>
+
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/patternfly/3.24.0/css/patternfly.min.css">
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/patternfly/3.24.0/css/patternfly-additions.min.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+
+    <style>
+        div.code {
+            white-space: pre;
+        }
+    </style>
+
+</head>
+<body style="padding: 5px;">
+<h1>Displaying Data Grid Cache</h1>
+<hr/>
+<div>
+    <input type="text" id="cacheId"/>
+    <button class="btn btn-info" id="request">Get Cache Value</button>
+    <hr/>
+    <div class="code" id="result"></div>
+    <div id="messages"></div>
+</div>
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="script.js"></script>
+<script>
+    $("#request").click((event) => {
+        fetchData();
+    });
+</script>
+</html>
