@@ -13,10 +13,12 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
-    <quarkus.platform.group-id>com.redhat.quarkus.platform</quarkus.platform.group-id>
-    <quarkus.platform.version>2.13.8.SP1-redhat-00003</quarkus.platform.version>
+    <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
+<!--    <quarkus.platform.group-id>com.redhat.quarkus.platform</quarkus.platform.group-id>-->
+    <quarkus.platform.version>3.4.0</quarkus.platform.version>
+<!--    <quarkus.platform.version>2.13.8.SP1-redhat-00003</quarkus.platform.version>-->
     <skipITs>true</skipITs>
-    <surefire-plugin.version>3.0.0-M7</surefire-plugin.version>
+    <surefire-plugin.version>3.1.2</surefire-plugin.version>
   </properties>
   <modules>
     <module>app1</module>
@@ -25,7 +27,7 @@
     <module>app1-camel-amq-datagrid</module>
     <module>app2-camel-amq-datagrid</module>
     <module>front-rest-cache-client</module>
-    <module>camel-rest-cache</module>
+    <module>app-camel-rest-cache</module>
   </modules>
   <dependencyManagement>
     <dependencies>
@@ -36,13 +38,23 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+
       <dependency>
-        <groupId>${quarkus.platform.group-id}</groupId>
-        <artifactId>quarkus-camel-bom</artifactId>
-        <version>${quarkus.platform.version}</version>
+        <groupId>org.apache.camel.quarkus</groupId>
+        <artifactId>camel-quarkus-bom</artifactId>
+        <version>3.2.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+
+<!--      <dependency>-->
+<!--        <groupId>${quarkus.platform.group-id}</groupId>-->
+<!--        <artifactId>quarkus-camel-bom</artifactId>-->
+<!--        <version>${quarkus.platform.version}</version>-->
+<!--        <type>pom</type>-->
+<!--        <scope>import</scope>-->
+<!--      </dependency>-->
+
       <dependency>
         <groupId>${project.groupId}</groupId>
         <artifactId>camel-amq-datagrid-common</artifactId>

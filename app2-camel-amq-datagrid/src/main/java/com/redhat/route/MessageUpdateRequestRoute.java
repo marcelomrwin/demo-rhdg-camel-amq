@@ -1,6 +1,5 @@
 package com.redhat.route;
 
-import org.apache.camel.ExchangePattern;
 import org.apache.camel.builder.RouteBuilder;
 
 public class MessageUpdateRequestRoute extends RouteBuilder {
@@ -11,6 +10,6 @@ public class MessageUpdateRequestRoute extends RouteBuilder {
                 .routeId("cache_update_request")
                 .log("Update request received for App2 with registration ID ${body}")
                 .toD("http:{{app2.endpoint.url}}/message/random/${body}?bridgeEndpoint=true")
-                ;
+        ;
     }
 }

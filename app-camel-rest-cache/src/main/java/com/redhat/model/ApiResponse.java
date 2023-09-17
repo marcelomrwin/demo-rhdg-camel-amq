@@ -1,6 +1,5 @@
 package com.redhat.model;
 
-import com.redhat.model.Registry;
 import lombok.Builder;
 import lombok.Data;
 

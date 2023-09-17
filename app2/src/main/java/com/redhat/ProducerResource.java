@@ -6,14 +6,15 @@ import java.math.RoundingMode;
 import java.util.Map;
 import java.util.Random;
 
-import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 import freemarker.template.Template;
 import io.quarkiverse.freemarker.TemplatePath;
@@ -23,6 +24,13 @@ import org.slf4j.LoggerFactory;
 @Path("/message")
 public class ProducerResource {
     static Random random = new Random();
+    protected Logger logger = LoggerFactory.getLogger(getClass());
+    @Inject
+    JMSClient jmsClient;
+    @Inject
+    @TemplatePath("request.ftl")
+    Template requestTemplate;
+
     public static int randomInt() {
         return random.nextInt(1000) + 1;
     }
@@ -30,22 +38,20 @@ public class ProducerResource {
     public static double randomDouble() {
         return BigDecimal.valueOf(random.nextDouble(1000) + 1).setScale(2, RoundingMode.HALF_EVEN).doubleValue();
     }
-    @Inject
-    JMSClient jmsClient;
 
-    @Inject
-    @TemplatePath("request.ftl")
-    Template requestTemplate;
-
-    protected Logger logger = LoggerFactory.getLogger(getClass());
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response ping() {
+        return Response.ok("OK").build();
+    }
 
     @POST
     @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.TEXT_PLAIN)
     public Response app2SendMessage(String xmlString) {
         try {
-            logger.info("sending message\n {}",xmlString);
-            jmsClient.sendMessage(xmlString,"APP2_DATA_RECORD_QUEUE");
+            logger.info("sending message\n {}", xmlString);
+            jmsClient.sendMessage(xmlString, "APP2_DATA_RECORD_QUEUE");
             return Response.status(Response.Status.CREATED).build();
         } catch (Exception e) {
             return Response.serverError().entity(e).build();
@@ -61,7 +67,7 @@ public class ProducerResource {
             StringWriter stringWriter = new StringWriter();
             requestTemplate.process(Map.of("id", id, "amount", String.valueOf(randomDouble()), "count", String.valueOf(randomInt())), stringWriter);
             String xmlString = stringWriter.toString();
-            logger.info("sending message\n {}",xmlString);
+            logger.info("sending message\n {}", xmlString);
             jmsClient.sendMessage(xmlString, "APP2_DATA_RECORD_QUEUE");
             return Response.status(Response.Status.CREATED).build();
         } catch (Exception e) {

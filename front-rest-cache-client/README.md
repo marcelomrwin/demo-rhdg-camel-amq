@@ -66,3 +66,8 @@ Use SmallRye Reactive Messaging
 Easily start your Reactive RESTful Web Services
 
 [Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
+
+## Deploy to Openshift
+```shell
+./mvnw clean package -DskipTests -Dquarkus.kubernetes.deploy=true -Dquarkus.openshift.route.expose=true
+```

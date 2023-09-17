@@ -25,12 +25,12 @@ Below is a description of each component of the solution:
     * Demonstrates how to consume data directly from the Data Grid and expose it through a REST API and an HTML interface. If the record is not found in the Data Grid, the application publishes a message in the _CACHE_UPDATE_REQUEST_ topic requesting that the applications publish data about the record in the AMQ MESSAGE BROKER and thus the Data Grid is updated.
     * Demonstrates how to configure and consume a Data Grid event listener to update the GUI in real time using [Server-Sent Events (SSE)](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events)
     * Expose API in URL `http://localhost:8090/api`
-  * **camel-rest-cache**:
+  * **app-camel-rest-cache**:
     * Exposes the record query through a REST API simplifying access for clients that don't need to deal with connectivity to the Data Grid.
     * If the record is not found in the Data Grid, the application publishes a message in the _CACHE_UPDATE_REQUEST_ topic requesting that the applications publish data about the record in the AMQ MESSAGE BROKER and thus the Data Grid is updated.
     * Expose API in URL `http://localhost:8089/api`
   * **nodejs-rest-client**:
-    * A simple client that consumes the API published by the _camel-rest-cache_ service and displays it through an HTML interface.
+    * A simple client that consumes the API published by the _app-camel-rest-cache_ service and displays it through an HTML interface.
 * **Producer layer**
   * **app1**: 
     * Represents an application with its particular data model. Publishes data changes to the _APP1_DATA_RECORD_QUEUE_ queue and receives notifications via REST API from _app1-camel-amq-datagrid_ camel route to provide data.
@@ -82,7 +82,7 @@ cd app2-camel-amq-datagrid
 
 ### Execute the second Integration layer
 ```shell
-cd camel-rest-cache
+cd app-camel-rest-cache
 ./mvnw quarkus:dev -Ddebug=false
 ```
 
@@ -92,7 +92,7 @@ cd front-rest-cache-client
 ./mvnw quarkus:dev -Ddebug=false
 ```
 
-### Execute the view client for camel-rest-cache
+### Execute the view client for app-camel-rest-cache
 ```shell
 cd front-nodejs-rest-client
 npm install

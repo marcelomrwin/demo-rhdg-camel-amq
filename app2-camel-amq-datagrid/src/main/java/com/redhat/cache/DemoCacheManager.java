@@ -4,19 +4,18 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Observes;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.transaction.TransactionManager;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.redhat.model.App1Model;
+import com.redhat.model.App2Model;
 import com.redhat.model.Application;
 import com.redhat.model.Herd;
 import com.redhat.model.Registry;
 import io.quarkus.runtime.StartupEvent;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Observes;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.transaction.TransactionManager;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -32,9 +31,9 @@ import org.slf4j.LoggerFactory;
 
 @ApplicationScoped
 @Named("customCacheManager")
-public class CacheManager implements Processor {
+public class DemoCacheManager implements Processor {
 
-    private static final Logger logger = LoggerFactory.getLogger(CacheManager.class);
+    private static final Logger logger = LoggerFactory.getLogger(DemoCacheManager.class);
 
     @Inject
     ObjectMapper objectMapper;
@@ -42,38 +41,46 @@ public class CacheManager implements Processor {
     RemoteCache<String, String> cache;
 
     @Inject
-    @ConfigProperty(name = "quarkus.infinispan-client.host")
+    @ConfigProperty(name = "demo.infinispan-client.host")
     String infinispanHost;
 
     @Inject
-    @ConfigProperty(name = "quarkus.infinispan-client.auth-username")
+    @ConfigProperty(name = "demo.infinispan-client.auth-username")
     String infinispanUser;
 
     @Inject
-    @ConfigProperty(name = "quarkus.infinispan-client.auth-password")
+    @ConfigProperty(name = "demo.infinispan-client.auth-password")
     String infinispanPassword;
 
     @Inject
-    @ConfigProperty(name = "quarkus.infinispan-client.remote.cache")
+    @ConfigProperty(name = "demo.infinispan-client.remote.cache")
     String infinispanRemoteCache;
+
+    RemoteCacheManager cacheManager;
 
     void onStart(@Observes StartupEvent ev) {
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.clientIntelligence(ClientIntelligence.BASIC);
         cb.addServer().host(infinispanHost).port(ConfigurationProperties.DEFAULT_HOTROD_PORT).security().authentication().username(infinispanUser).password(infinispanPassword);
         cb.transactionTimeout(1L, TimeUnit.MINUTES);
-        cb.remoteCache(infinispanRemoteCache).transactionManagerLookup(GenericTransactionManagerLookup.getInstance()).transactionMode(TransactionMode.NON_XA);
-        RemoteCacheManager cacheManager = new RemoteCacheManager(cb.build());
-        cache = cacheManager.getCache(infinispanRemoteCache);
+        cb.remoteCache(infinispanRemoteCache)
+                .transactionManagerLookup(GenericTransactionManagerLookup.getInstance())
+                .transactionMode(TransactionMode.NON_XA);
+        cacheManager = new RemoteCacheManager(cb.build());
+        cacheManager.start();
     }
 
     @Override
     public void process(Exchange exchange) throws Exception {
+        cache = cacheManager.getCache(infinispanRemoteCache);
+        cache.start();
+        logger.info("Processing {} for cache {}, is stats? {}", this, cache.getName(), cache.stats().getStatsMap());
 
         TransactionManager transactionManager = cache.getTransactionManager();
         transactionManager.begin();
 
-        App1Model model = exchange.getMessage().getBody(App1Model.class);
+        App2Model model = exchange.getMessage().getBody(App2Model.class);
+
         Registry cacheModel = Registry.builder()
                 .id(model.getId())
                 .build();
@@ -92,7 +99,7 @@ public class CacheManager implements Processor {
 
         if (Objects.isNull(cacheModel.getApplications())) cacheModel.setApplications(new ArrayList<>());
 
-        for (App1Model.Loan loan : model.getLoans()) {
+        for (App2Model.Loan loan : model.getLoans()) {
             cacheModel.getApplications().add(Application.builder()
                     .schemeCode(model.getAppId())
                     .appAmount(loan.getValue())
@@ -102,15 +109,16 @@ public class CacheManager implements Processor {
 
         if (Objects.isNull(cacheModel.getHerds())) cacheModel.setHerds(new ArrayList<>());
 
-        for (App1Model.Flock flock : model.getFlocks()) {
+        for (App2Model.Flock flock : model.getFlocks()) {
             cacheModel.getHerds().add(Herd.builder()
                     .count(flock.getTotal()).herdType(flock.getType()).herdSubType(flock.getLocation())
                     .build());
         }
 
         exchange.getIn().setBody(cacheModel);
+
         cache.put(String.valueOf(model.getId()), objectMapper.writeValueAsString(cacheModel));
         transactionManager.commit();
-        logger.info("Cache key {}",model.getId());
+        logger.info("Cache key {} updated", model.getId());
     }
 }

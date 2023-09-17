@@ -1,9 +1,9 @@
 package com.redhat;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.jms.ConnectionFactory;
-import javax.jms.JMSContext;
-import javax.jms.TextMessage;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.jms.ConnectionFactory;
+import jakarta.jms.JMSContext;
+import jakarta.jms.TextMessage;
 
 @ApplicationScoped
 public class JMSClient {

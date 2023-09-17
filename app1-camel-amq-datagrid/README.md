@@ -52,3 +52,8 @@ If you want to learn more about building native executables, please consult http
 - Camel AMQP ([guide](https://access.redhat.com/documentation/en-us/red_hat_integration/2.latest/html/camel_extensions_for_quarkus_reference/extensions-amqp)): Messaging with AMQP protocol using Apache QPid Client
 - Camel Log ([guide](https://access.redhat.com/documentation/en-us/red_hat_integration/2.latest/html/camel_extensions_for_quarkus_reference/extensions-log)): Log messages to the underlying logging mechanism
 - Camel Infinispan ([guide](https://access.redhat.com/documentation/en-us/red_hat_integration/2.latest/html/camel_extensions_for_quarkus_reference/extensions-infinispan)): Read and write from/to Infinispan distributed key/value store and data grid
+
+## Deploy to Openshift
+```shell
+./mvnw clean package -DskipTests -Dquarkus.kubernetes.deploy=true
+```

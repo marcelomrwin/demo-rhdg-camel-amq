@@ -9,6 +9,7 @@ import org.apache.camel.component.infinispan.InfinispanOperation;
 
 public class CacheRoute extends RouteBuilder {
 
+
     @Override
     public void configure() throws Exception {
         from("direct:getRegistry")
@@ -54,4 +55,6 @@ public class CacheRoute extends RouteBuilder {
         ;
 
     }
+
+
 }

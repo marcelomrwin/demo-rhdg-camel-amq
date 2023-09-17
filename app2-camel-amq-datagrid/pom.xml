@@ -10,8 +10,23 @@
     <version>1.0-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
-
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>io.quarkiverse.artemis</groupId>
+        <artifactId>quarkus-artemis-bom</artifactId>
+                    <version>3.1.0</version>
+<!--        <version>2.1.1</version>-->
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
   <dependencies>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-openshift</artifactId>
+    </dependency>
     <dependency>
       <groupId>com.redhat</groupId>
       <artifactId>camel-amq-datagrid-common</artifactId>
@@ -38,12 +53,22 @@
       <artifactId>camel-quarkus-amqp</artifactId>
     </dependency>
     <dependency>
+      <groupId>io.quarkiverse.artemis</groupId>
+      <artifactId>quarkus-artemis-jms</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.apache.camel.quarkus</groupId>
       <artifactId>camel-quarkus-log</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.camel.quarkus</groupId>
       <artifactId>camel-quarkus-infinispan</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>org.infinispan</groupId>
+          <artifactId>infinispan-commons</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>

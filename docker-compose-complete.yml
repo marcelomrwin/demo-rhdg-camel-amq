@@ -68,7 +68,7 @@ services:
     environment:
       AMQP_HOST: artemis
     ports:
-      - "8091:8091"
+      - "8091:8080"
     depends_on:
       infinispan:
         condition: service_healthy
@@ -93,7 +93,7 @@ services:
     environment:
       AMQP_HOST: artemis
     ports:
-      - "8092:8092"
+      - "8092:8080"
     depends_on:
       infinispan:
         condition: service_healthy
@@ -171,7 +171,7 @@ services:
       AMQP_HOST: artemis
       DG_HOST: infinispan
     ports:
-      - "8090:8090"
+      - "8090:8080"
     depends_on:
       infinispan:
         condition: service_healthy
@@ -186,18 +186,18 @@ services:
         reservations:
           memory: "20M"
 
-  camel-rest-cache:
-    image: camel-rest-cache:1.0
-    container_name: camel-rest-cache
-    hostname: camel-rest-cache
+  app-camel-rest-cache:
+    image: app-camel-rest-cache:1.0
+    container_name: app-camel-rest-cache
+    hostname: app-camel-rest-cache
     build:
-      context: camel-rest-cache
+      context: app-camel-rest-cache
       dockerfile: src/main/docker/Dockerfile.jvm
     environment:
       AMQP_HOST: artemis
       DG_HOST: infinispan
     ports:
-      - "8089:8089"
+      - "8089:8080"
     depends_on:
       infinispan:
         condition: service_healthy
@@ -229,7 +229,7 @@ services:
         condition: service_healthy
       artemis:
         condition: service_healthy
-      camel-rest-cache:
+      app-camel-rest-cache:
         condition: service_started
     networks:
       - demo-network

@@ -3,32 +3,29 @@ package com.redhat;
 import java.time.LocalTime;
 import java.util.Optional;
 
-import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.sse.OutboundSseEvent;
-import javax.ws.rs.sse.Sse;
-import javax.ws.rs.sse.SseEventSink;
-
 import com.redhat.model.Registry;
 import io.quarkus.vertx.ConsumeEvent;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.sse.OutboundSseEvent;
+import jakarta.ws.rs.sse.Sse;
+import jakarta.ws.rs.sse.SseEventSink;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Path("/api")
 public class AppCacheResource {
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Inject
     AppCacheService service;
-
     private Sse sse;
     private SseEventSink sseEventSink = null;
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
 
     @GET
     @Produces(MediaType.SERVER_SENT_EVENTS)
@@ -41,6 +38,7 @@ public class AppCacheResource {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getRegistry(String id) {
+        logger.info("Receive request for key {}",id);
         try {
             Optional<Registry> registryOptional = service.query(id);
             if (registryOptional.isEmpty()) {
@@ -58,7 +56,7 @@ public class AppCacheResource {
                 return Response.ok(response).build();
             }
         } catch (Exception e) {
-            logger.error(e.getMessage(),e);
+            logger.error(e.getMessage(), e);
             return Response.serverError().entity(e).build();
         }
     }

@@ -66,3 +66,46 @@ Use SmallRye Reactive Messaging
 Easily start your Reactive RESTful Web Services
 
 [Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
+
+## Forwarding openshift containers
+```shell
+oc port-forward artemis-ss-0 61616:61616
+oc port-forward infinispan-0 11222:11222
+```
+
+## Generate a docker image
+```shell
+docker build -f src/main/docker/Dockerfile.jvm -t marcelodsales/camel-rest-cache:latest .
+```
+
+## Deploy image to Openshift
+```shell
+oc patch configs.imageregistry.operator.openshift.io/cluster --patch '{"spec":{"defaultRoute":true}}' --type=merge
+HOST=$(oc get route default-route -n openshift-image-registry --template='{{ .spec.host }}')
+docker login -u kubeadmin -p $(oc whoami -t) $HOST
+echo $HOST >> default-route-openshift-image-registry.apps.ocp4.masales.cloud
+docker tag marcelodsales/camel-rest-cache  $HOST/demo-rhdg-camel-amq/camel-rest-cache:1.0-SNAPSHOT
+docker push default-route-openshift-image-registry.apps.ocp4.masales.cloud/demo-rhdg-camel-amq/camel-rest-cache:1.0-SNAPSHOT
+oc new-app --name camel-rest-cache camel-rest-cache:1.0-SNAPSHOT
+```
+
+## Run the image in local environment
+```shell
+docker run -it --rm --name camel-rest-cache \
+-p 8089:8080 \
+-e DG_USER=developer \
+-e DG_PASS=ngTKaVlLcAZWjJCn \
+-e AMQP_HOST=host.docker.internal \
+-e DG_HOST=host.docker.internal \
+-e QUARKUS_LOG_LEVEL=DEBUG \
+default-route-openshift-image-registry.apps.ocp4.masales.cloud/demo-rhdg-camel-amq/camel-rest-cache:1.0-SNAPSHOT
+```
+
+## Deploy to Openshift
+```shell
+oc delete dc camel-rest-cache
+oc delete bc camel-rest-cache
+oc delete is camel-rest-cache
+oc delete svc camel-rest-cache
+./mvnw clean package -DskipTests -Dquarkus.kubernetes.deploy=true -Dquarkus.openshift.route.expose=true
+```

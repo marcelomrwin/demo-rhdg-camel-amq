@@ -1,7 +1,7 @@
 package com.redhat.route;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.transaction.RollbackException;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.RollbackException;
 
 import org.apache.camel.builder.RouteBuilder;
 

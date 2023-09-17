@@ -1,9 +1,9 @@
 package com.redhat;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.jms.ConnectionFactory;
-import javax.jms.JMSContext;
-import javax.jms.TextMessage;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.jms.ConnectionFactory;
+import jakarta.jms.JMSContext;
+import jakarta.jms.TextMessage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +18,7 @@ public class JMSClient {
     }
 
     public void sendRequest(String id) {
-        logger.warn("SENDING REQUEST FOR ID {}", id);
+        logger.info("sending JMS request for key {}", id);
         try (JMSContext context = connectionFactory.createContext(JMSContext.AUTO_ACKNOWLEDGE)) {
             TextMessage textMessage = context.createTextMessage(id);
             context.createProducer().send(context.createTopic("CACHE_UPDATE_REQUEST"), textMessage);
