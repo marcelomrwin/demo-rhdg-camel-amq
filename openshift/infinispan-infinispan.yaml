@@ -1,0 +1,110 @@
+﻿apiVersion: infinispan.org/v1
+kind: Infinispan
+metadata:
+  annotations:
+    infinispan.org/monitoring: 'true'
+    infinispan.org/operatorPodTargetLabels: 'rht.comp,rht.comp_ver,rht.prod_name,rht.prod_ver,rht.subcomp_t'
+  resourceVersion: '84897'
+  name: infinispan
+  uid: dbc9a1c0-a050-4226-961f-3a2b99e9ccf8
+  creationTimestamp: '2023-09-17T10:25:40Z'
+  generation: 2
+  managedFields:
+    - apiVersion: infinispan.org/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:status':
+          'f:operand':
+            .: {}
+            'f:image': {}
+            'f:phase': {}
+            'f:version': {}
+          'f:podStatus': {}
+          'f:statefulSetName': {}
+      manager: infinispan-operator
+      operation: Update
+      time: '2023-09-17T10:26:02Z'
+    - apiVersion: infinispan.org/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:spec':
+          .: {}
+          'f:replicas': {}
+          'f:security':
+            .: {}
+            'f:endpointAuthentication': {}
+            'f:endpointEncryption':
+              'f:type': {}
+          'f:service':
+            .: {}
+            'f:type': {}
+      manager: Mozilla
+      operation: Update
+      time: '2023-09-17T10:32:45Z'
+    - apiVersion: infinispan.org/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:status':
+          'f:conditions': {}
+          'f:podStatus':
+            'f:ready': {}
+      manager: infinispan-operator
+      operation: Update
+      subresource: status
+      time: '2023-09-17T11:09:46Z'
+  namespace: demo-rhdg-camel-amq
+  labels:
+    rht.comp: Data_Grid
+    rht.comp_ver: 8.4.3
+    rht.prod_name: Red_Hat_Runtimes
+    rht.prod_ver: 2023-Q2
+    rht.subcomp_t: application
+spec:
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - podAffinityTerm:
+            labelSelector:
+              matchLabels:
+                app: infinispan-pod
+                clusterName: infinispan
+                infinispan_cr: infinispan
+            topologyKey: kubernetes.io/hostname
+          weight: 100
+  configListener:
+    enabled: true
+    logging:
+      level: info
+  container:
+    memory: 1Gi
+  replicas: 1
+  security:
+    endpointAuthentication: true
+    endpointEncryption:
+      clientCert: None
+      type: None
+    endpointSecretName: infinispan-generated-secret
+  service:
+    container:
+      storage: 1Gi
+    type: DataGrid
+  upgrades:
+    type: Shutdown
+  version: 8.4.3-1
+status:
+  conditions:
+    - status: 'True'
+      type: PreliminaryChecksPassed
+    - message: 'View: infinispan-0-40322'
+      status: 'True'
+      type: WellFormed
+  operand:
+    image: >-
+      registry.redhat.io/datagrid/datagrid-8-rhel8@sha256:424b30dccd773f69c079b35a42e8c3e339246c5d490e14e3fcfb8bd8144a9160
+    phase: Running
+    version: 8.4.3-1
+  podStatus:
+    ready:
+      - infinispan-0
+  replicas: 1
+  statefulSetName: infinispan

@@ -1,0 +1,71 @@
+﻿apiVersion: infinispan.org/v2alpha1
+kind: Cache
+metadata:
+  creationTimestamp: '2023-09-17T17:07:49Z'
+  finalizers:
+    - finalizer.infinispan.org
+  generation: 1
+  managedFields:
+    - apiVersion: infinispan.org/v2alpha1
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:spec':
+          .: {}
+          'f:clusterName': {}
+          'f:name': {}
+          'f:template': {}
+          'f:updates':
+            .: {}
+            'f:strategy': {}
+      manager: Mozilla
+      operation: Update
+      time: '2023-09-17T17:07:49Z'
+    - apiVersion: infinispan.org/v2alpha1
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
+          'f:finalizers':
+            .: {}
+            'v:"finalizer.infinispan.org"': {}
+      manager: infinispan-operator
+      operation: Update
+      time: '2023-09-17T17:07:49Z'
+    - apiVersion: infinispan.org/v2alpha1
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:status':
+          .: {}
+          'f:conditions': {}
+      manager: infinispan-operator
+      operation: Update
+      subresource: status
+      time: '2023-09-17T17:07:49Z'
+  name: data-layer-cache
+  namespace: demo-rhdg-camel-amq
+  resourceVersion: '257254'
+  uid: df73c97c-a7b3-437b-b1e6-3874f5fb5073
+spec:
+  clusterName: infinispan
+  name: DATA-LAYER-CACHE
+  template: |
+    replicatedCache: 
+      mode: "SYNC"
+      statistics: "true"
+      encoding: 
+        mediaType: "application/x-protostream"
+      locking: 
+        isolation: "REPEATABLE_READ"
+      transaction: 
+        mode: "NON_XA"
+        locking: "PESSIMISTIC"
+      expiration: 
+        lifespan: "300000"
+      memory: 
+        maxSize: "10MB"
+        whenFull: "REMOVE"
+  updates:
+    strategy: retain
+status:
+  conditions:
+    - status: 'True'
+      type: Ready
